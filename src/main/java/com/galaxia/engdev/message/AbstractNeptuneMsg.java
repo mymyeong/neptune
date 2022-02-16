@@ -13,12 +13,12 @@ import com.galaxia.engdev.crypto.Seed;
 import com.galaxia.engdev.dexeption.NeptuneException;
 import com.galaxia.engdev.errorcode.NeptuneErrorCode;
 import com.galaxia.engdev.message.tag.IMessageTag;
-import com.galaxia.engdev.message.tag.MessageTagDao;
 import com.galaxia.engdev.message.tag.MessageType;
 import com.galaxia.engdev.message.tag.NeptuneHeader;
+import com.galaxia.engdev.message.tag.NeptuneMsgTagList;
 import com.galaxia.engdev.util.NumberUtil;
 import com.galaxia.engdev.util.StringUtil;
-import lombok.AccessLevel;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -60,8 +60,8 @@ public abstract class AbstractNeptuneMsg {
 		encHeaderSet.add(NeptuneHeader.NUMBER_OF_RECORD);
 	}
 
-	@Getter(AccessLevel.NONE)
-	protected ArrayList<IMessageTag> setDataTagList = new ArrayList<IMessageTag>();
+//	@Getter(AccessLevel.NONE)
+//	protected ArrayList<IMessageTag> setDataTagList = new ArrayList<IMessageTag>();
 
 	@Override
 	public String toString() {
@@ -90,20 +90,25 @@ public abstract class AbstractNeptuneMsg {
 
 	public byte[] getBytesFromMessageTagSet(LinkedHashSet<IMessageTag> set) throws Exception {
 		// 암호화키 get
-		AbstractCipher cipher = getMsgCipher();
 
+		// 메시지 바디 생성
 		byte[] body = getByteArray(set);
+
+		// 암호화 헤더
 		byte[] encHeader = getHeaderByte(encHeaderSet);
 
 		ByteBuffer bodyBuffer = ByteBuffer.allocate(body.length + encHeader.length);
 		bodyBuffer.put(encHeader).put(body);
 
+		// 암호화 메시지 처리
+		AbstractCipher cipher = getMsgCipher();
 		if (cipher != null) {
 			body = Base64.getEncoder().encode(cipher.encrypt(bodyBuffer.array()));
 		} else {
 			body = bodyBuffer.array();
 		}
 
+		// 암호화 하지 않는 헤더, 메시지 전체 길이 헤더생성을 위해 암호화 바디 생성 후 진행
 		byte[] header = getHeaderByte(headerSet);
 
 		ByteBuffer bb = ByteBuffer.allocate(NeptuneHeader.MESSAGE_LENGTH.getLength() + header.length + body.length);
@@ -124,7 +129,7 @@ public abstract class AbstractNeptuneMsg {
 	}
 
 	protected byte[] getHeaderByte(LinkedHashSet<IMessageTag> set) throws Exception {
-		ByteBuffer buffer = ByteBuffer.allocate(getLength(set));
+		ByteBuffer buffer = ByteBuffer.allocate(getMsgSetLength(set));
 		for (IMessageTag tag : set) {
 			String getterName = StringUtil.getGetterName(tag.getName());
 			Object obj = this.getClass().getMethod(getterName).invoke(this);
@@ -141,13 +146,8 @@ public abstract class AbstractNeptuneMsg {
 		return buffer.array();
 	}
 
-	protected int getLength(LinkedHashSet<IMessageTag> set) {
-		int totalLength = 0;
-		for (IMessageTag tag : set) {
-			totalLength += tag.getLength();
-		}
-
-		return totalLength;
+	protected int getMsgSetLength(LinkedHashSet<IMessageTag> set) {
+		return set.stream().mapToInt(v -> v.getLength()).sum();
 	}
 
 	/**
@@ -164,11 +164,12 @@ public abstract class AbstractNeptuneMsg {
 			}
 
 			try {
-				IMessageTag neptuneMsgTag = MessageTagDao.getNeptuneTagByName(StringUtil.toUpperSnake(f.getName()));
-				if (neptuneMsgTag == null) {
+				IMessageTag msgTag = NeptuneMsgTagList.getNeptuneTagByName(StringUtil.toUpperSnake(f.getName()));
+				if (msgTag == null) {
 					log.info("NeptuneMsgTag is null[" + f.getName() + "]");
+				} else {
+					set.add(msgTag);
 				}
-				set.add(neptuneMsgTag);
 			} catch (Exception e) {
 				log.info("해당 태그를 찾을 수 없습니다.[" + f.getName() + "]");
 			}
@@ -219,7 +220,14 @@ public abstract class AbstractNeptuneMsg {
 
 	public void setData(byte[] data) throws NeptuneException {
 
+		int pos = setHeader(data);
+
+		setBody(Arrays.copyOfRange(data, pos, data.length));
+	}
+
+	private int setHeader(byte[] data) throws NeptuneException {
 		int pos = 0;
+
 		String version = new String(Arrays.copyOfRange(data, pos, pos += NeptuneHeader.VERSION.getLength())).trim();
 		String serviceId = new String(Arrays.copyOfRange(data, pos, pos += NeptuneHeader.SERVICE_ID.getLength())).trim();
 		String serviceCode = new String(Arrays.copyOfRange(data, pos, pos += NeptuneHeader.SERVICE_CODE.getLength())).trim();
@@ -252,7 +260,7 @@ public abstract class AbstractNeptuneMsg {
 		setOrderDate(orderDate);
 		setNumberOfRecord(numberOfRecord);
 
-		setBody(Arrays.copyOfRange(data, pos, data.length));
+		return pos;
 	}
 
 	private void setBody(byte[] data) throws NeptuneException {
@@ -263,11 +271,11 @@ public abstract class AbstractNeptuneMsg {
 				int messageCnt = Integer.parseInt(new String(Arrays.copyOfRange(data, pos, pos += MESSAGE_COUNT_LENGTH)));
 				Integer.parseInt(new String(Arrays.copyOfRange(data, pos, pos += VALUE_LENGTH)));
 
-				IMessageTag tag = MessageTagDao.getNeptuneTag(messageCode);
+				IMessageTag tag = NeptuneMsgTagList.getNeptuneTag(messageCode);
 
 				if (tag == null) {
 					int dataLength = Integer.parseInt(new String(Arrays.copyOfRange(data, pos, pos += VALUE_LENGTH)));
-					new String(Arrays.copyOfRange(data, pos, pos += dataLength)).trim();
+					Arrays.copyOfRange(data, pos, pos += dataLength);
 					continue;
 				}
 
@@ -281,9 +289,9 @@ public abstract class AbstractNeptuneMsg {
 					case Integer:
 						if (NumberUtil.isNumber(temp)) {
 							int n = Integer.parseInt(temp.equals("") ? "0" : temp);
-							if (n != 0) {
-								setDataTagList.add(tag);
-							}
+//							if (n != 0) {
+//								setDataTagList.add(tag);
+//							}
 							this.getClass().getMethod(setterName, Integer.class).invoke(this, n);
 						} else {
 							log.info("Integer 변환 에러[" + temp + "]");
@@ -303,9 +311,9 @@ public abstract class AbstractNeptuneMsg {
 					default:
 						this.getClass().getMethod(setterName, String.class).invoke(this, temp);
 
-						if (!temp.equals("")) {
-							setDataTagList.add(tag);
-						}
+//						if (!temp.equals("")) {
+//							setDataTagList.add(tag);
+//						}
 						break;
 					}
 				} else if (messageCnt > 1) {
@@ -335,7 +343,7 @@ public abstract class AbstractNeptuneMsg {
 						this.getClass().getMethod(setterName, String[].class).invoke(this, new Object[] { strData });
 						break;
 					}
-					setDataTagList.add(tag);
+//					setDataTagList.add(tag);
 				}
 
 			} catch (NoSuchMethodException e) {

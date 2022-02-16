@@ -1,4 +1,4 @@
-package com.galaxia.engdev.crypto;
+package com.galaxia.engdev.crypto.inc;
 
 /**
  * @file KISA_SEED_CBC.java

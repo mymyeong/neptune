@@ -1,5 +1,7 @@
 package com.galaxia.engdev.crypto;
 
+import com.galaxia.engdev.crypto.inc.KISA_SEED_CBC;
+
 public class Seed extends AbstractCipher {
 
 	@Override

@@ -14,13 +14,13 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @Component
-public class NeptuneMessageTagApplicationLisener implements ApplicationListener<ApplicationStartedEvent> {
+public class NeptuneMsgTagApplicationLisener implements ApplicationListener<ApplicationStartedEvent> {
 
 	@Override
 	public void onApplicationEvent(ApplicationStartedEvent event) {
-		MessageTagDao.NEPTUNE_MESSAGE_TAG_LIST.add(new NeptuneMsgTag(4, "", "", MessageType.String));
+		NeptuneMsgTagList.addTag(new NeptuneMsgTag(4, "", "", MessageType.String));
 
-		log.info("MESSAGE TAG 초기화 완료 : CNT : {}", MessageTagDao.NEPTUNE_MESSAGE_TAG_LIST.size());
+		log.info("MESSAGE TAG 초기화 완료 : CNT : {}", NeptuneMsgTagList.getSize());
 	}
 
 }
