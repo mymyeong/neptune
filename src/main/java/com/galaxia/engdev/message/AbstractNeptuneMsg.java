@@ -18,7 +18,6 @@ import com.galaxia.engdev.message.tag.NeptuneHeader;
 import com.galaxia.engdev.message.tag.NeptuneMsgTagList;
 import com.galaxia.engdev.util.NumberUtil;
 import com.galaxia.engdev.util.StringUtil;
-import com.google.common.base.MoreObjects;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -70,14 +69,15 @@ public abstract class AbstractNeptuneMsg {
 	}
 
 	public String getHeaderLogStr() {
-		return MoreObjects.toStringHelper(this) //
-				.add(version, "version")//
-				.add(serviceId, "serviceId")//
-				.add(serviceCode, "serviceCode")//
-				.add(command, "command")//
-				.add(orderId, "orderId")//
-				.add(orderDate, "orderDate")//
-				.toString();
+		StringBuilder builder = new StringBuilder();
+		builder.append("[version=").append(version)//
+				.append(", serviceId=").append(serviceId)//
+				.append(", serviceCode=").append(serviceCode)//
+				.append(", command=").append(command)//
+				.append(", orderId=").append(orderId)//
+				.append(", orderDate=").append(orderDate)//
+				.append("]");
+		return builder.toString();
 	}
 
 	public String getLogMessage() {
@@ -88,7 +88,8 @@ public abstract class AbstractNeptuneMsg {
 		return getBytesFromMessageTagSet(getFieldMessageTagSet());
 	}
 
-	protected byte[] getBytesFromMessageTagSet(LinkedHashSet<IMessageTag> set) throws Exception {
+	public byte[] getBytesFromMessageTagSet(LinkedHashSet<IMessageTag> set) throws Exception {
+		// 암호화키 get
 
 		// 메시지 바디 생성
 		byte[] body = getByteArray(set);
@@ -119,7 +120,7 @@ public abstract class AbstractNeptuneMsg {
 		return bb.array();
 	}
 
-	protected AbstractCipher getMsgCipher() {
+	private AbstractCipher getMsgCipher() {
 		AbstractCipher seed = new Seed();
 		seed.setKey("".getBytes());
 		seed.setIv("".getBytes());
@@ -154,7 +155,7 @@ public abstract class AbstractNeptuneMsg {
 	 *
 	 * @return
 	 */
-	protected LinkedHashSet<IMessageTag> getFieldMessageTagSet() {
+	public LinkedHashSet<IMessageTag> getFieldMessageTagSet() {
 		LinkedHashSet<IMessageTag> set = new LinkedHashSet<>();
 		for (Field f : this.getClass().getDeclaredFields()) {
 			// 내부 객체 필드 제외
@@ -224,7 +225,7 @@ public abstract class AbstractNeptuneMsg {
 		setBody(Arrays.copyOfRange(data, pos, data.length));
 	}
 
-	protected int setHeader(byte[] data) throws NeptuneException {
+	private int setHeader(byte[] data) throws NeptuneException {
 		int pos = 0;
 
 		String version = new String(Arrays.copyOfRange(data, pos, pos += NeptuneHeader.VERSION.getLength())).trim();
@@ -262,7 +263,7 @@ public abstract class AbstractNeptuneMsg {
 		return pos;
 	}
 
-	protected void setBody(byte[] data) throws NeptuneException {
+	private void setBody(byte[] data) throws NeptuneException {
 		int pos = 0;
 		for (int i = 0; i < numberOfRecord; i++) {
 			try {
