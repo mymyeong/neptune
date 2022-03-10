@@ -30,7 +30,7 @@ public interface IMessageTag {
 	 * @return
 	 */
 	public String getCode();
-	
+
 	/**
 	 * Message 의 Name
 	 *

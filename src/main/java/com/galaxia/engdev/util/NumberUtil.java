@@ -350,7 +350,7 @@ public class NumberUtil {
 
 	/**
 	 * 랜덤 번호 생성
-	 * 
+	 *
 	 * @param min
 	 * @param max
 	 * @return

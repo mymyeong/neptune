@@ -19,14 +19,11 @@ import lombok.Setter;
 @AllArgsConstructor
 public class NeptuneMsgTag implements IMessageTag {
 
-	private int length;
-
 	private String code;
-
 	private String name;
-
+	private int length;
 	private MessageType messageType;
-	
+
 	@Override
 	public MessageType getMessageType() {
 		return messageType;
@@ -58,7 +55,7 @@ public class NeptuneMsgTag implements IMessageTag {
 			int[] temp = (int[]) obj;
 			dataCnt = temp.length;
 			for (int i = 0; i < dataCnt; i++) {
-				data = NumberUtil.toZeroString((int) temp[i], this.getLength()).getBytes();
+				data = NumberUtil.toZeroString(temp[i], this.getLength()).getBytes();
 				dataList.add(data);
 				totalLength += data.length;
 			}
@@ -118,6 +115,5 @@ public class NeptuneMsgTag implements IMessageTag {
 
 		return buffer.array();
 	}
-
 
 }

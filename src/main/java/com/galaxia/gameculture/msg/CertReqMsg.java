@@ -10,10 +10,10 @@ import lombok.Setter;
 @Getter
 @Setter
 @Data
-@EqualsAndHashCode(callSuper=false)
+@EqualsAndHashCode(callSuper = false)
 public class CertReqMsg extends AbstractNeptuneMsg {
 
-	private String id;
+	private String pinNumber[];
 
 	private Integer amount;
 }

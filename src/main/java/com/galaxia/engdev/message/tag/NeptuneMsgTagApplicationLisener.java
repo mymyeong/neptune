@@ -8,7 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 
 /**
  * Message tag init
- * 
+ *
  * @author mjhan
  *
  */
@@ -18,7 +18,8 @@ public class NeptuneMsgTagApplicationLisener implements ApplicationListener<Appl
 
 	@Override
 	public void onApplicationEvent(ApplicationStartedEvent event) {
-		NeptuneMsgTagList.addTag(new NeptuneMsgTag(4, "", "", MessageType.String));
+		NeptuneMsgTagList.addTag(new NeptuneMsgTag("0008", "pinNumber", 10, MessageType.StringArray));
+		NeptuneMsgTagList.addTag(new NeptuneMsgTag("1007", "amount", 10, MessageType.Integer));
 
 		log.info("MESSAGE TAG 초기화 완료 : CNT : {}", NeptuneMsgTagList.getSize());
 	}

@@ -27,22 +27,22 @@ public class NeptuneMsgHandler extends SimpleChannelInboundHandler<AbstractNeptu
 
 	/*
 	 * // private ByteBuf buffer; // private int totalSize = 0;
-	 * 
+	 *
 	 * @Override public void channelActive(ChannelHandlerContext ctx) {
-	 * 
+	 *
 	 * ctx.fireChannelActive(); if (log.isDebugEnabled()) {
 	 * log.debug(ctx.channel().remoteAddress() + ""); } String remoteAddress =
 	 * ctx.channel().remoteAddress().toString();
-	 * 
+	 *
 	 * ctx.writeAndFlush("Your remote address is " + remoteAddress +
 	 * System.lineSeparator());
-	 * 
+	 *
 	 * }
-	 * 
+	 *
 	 * @Override public void channelRead(ChannelHandlerContext ctx, Object msg) { //
 	 * String stringMessage = (String) msg; // log.info(stringMessage); //
 	 * ctx.channel().writeAndFlush(stringMessage + System.lineSeparator());
-	 * 
+	 *
 	 * // ByteBuf b = (ByteBuf) msg; // buffer.writeBytes(b); // b.release(); // int
 	 * readableByte = buffer.readableBytes(); // if (readableByte > 12 && totalSize
 	 * == 0) { // byte[] bytes = new byte[4]; // buffer.getBytes(4, bytes); ////
@@ -52,12 +52,12 @@ public class NeptuneMsgHandler extends SimpleChannelInboundHandler<AbstractNeptu
 	 * //// PacketDto packet =
 	 * PacketDto.builder().bytes(bytes).filePath(commonProp.getFilePath()).build();
 	 * //// analyzeSched.addQueue(packet); // clearBuffer(); // }
-	 * 
+	 *
 	 * }
-	 * 
+	 *
 	 * @Override public void exceptionCaught(ChannelHandlerContext ctx, Throwable
 	 * cause) { log.error(cause.getMessage(), cause); }
-	 * 
+	 *
 	 * // @Override // public void handlerAdded(ChannelHandlerContext ctx) throws
 	 * Exception { // buffer = ctx.alloc().buffer(); // } // // @Override // public
 	 * void handlerRemoved(ChannelHandlerContext ctx) throws Exception { //

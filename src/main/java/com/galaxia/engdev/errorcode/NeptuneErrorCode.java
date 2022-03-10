@@ -45,7 +45,7 @@ public class NeptuneErrorCode {
 
 	/** 메시지 복호화 에러 */
 	public static final String MESSAGE_DECRYPT_ERROR = "MESSAGE_DECRYPT_ERROR";
-	
+
 	/** 메시지 테그 타입 에러 */
 	public static final String MESSAGE_TAG_TYPE_ERROR = "TAG_TYPE_ERROR";
 

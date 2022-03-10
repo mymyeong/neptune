@@ -267,7 +267,7 @@ public class StringUtil {
 			// 입력된 길이보다 해당 String이 긴 경우
 			if (in_len > out_len) {
 				int notHanPos = out_len - 1;
-				while ((int) (input[notHanPos]) > 128 || (int) (input[notHanPos]) < 0) {
+				while ((input[notHanPos]) > 128 || (input[notHanPos]) < 0) {
 					notHanPos--;
 					if (notHanPos < 0)
 						break;
@@ -417,7 +417,7 @@ public class StringUtil {
 	}
 
 	public static int availibleByteNum(char c) {
-		int digit = (int) c;
+		int digit = c;
 
 		if (ONE_BYTE_MIN <= digit && digit <= ONE_BYTE_MAX)
 			return 1;

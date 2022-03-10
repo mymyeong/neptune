@@ -56,6 +56,7 @@ public enum MessageType {
 			if (obj instanceof Integer[]) {
 				return true;
 			}
+
 			return false;
 		}
 	},
@@ -69,7 +70,10 @@ public enum MessageType {
 	String() {
 		@Override
 		public boolean typeChecker(Object obj) {
-			return true;
+			if (obj instanceof String) {
+				return true;
+			}
+			return false;
 		}
 	},
 
