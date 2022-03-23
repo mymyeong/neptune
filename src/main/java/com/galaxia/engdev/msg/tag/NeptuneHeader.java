@@ -1,8 +1,10 @@
-package com.galaxia.engdev.message.tag;
+package com.galaxia.engdev.msg.tag;
 
-import com.galaxia.engdev.dexeption.NeptuneException;
+import java.util.Arrays;
 
-public enum NeptuneHeader implements IMessageTag {
+import com.galaxia.engdev.exception.NeptuneException;
+
+public enum NeptuneHeader implements MessageTag {
 
 	// NEPTUNE HEADER
 	MESSAGE_LENGTH(4, "messageLength", "messageLength", MessageType.Integer), //
@@ -20,6 +22,13 @@ public enum NeptuneHeader implements IMessageTag {
 	private String code;
 	private String name;
 	private MessageType messageType;
+
+	private static int headerLength;
+	static {
+		headerLength = Arrays.stream(values()) //
+				.mapToInt(v -> v.getLength()) //
+				.sum();
+	}
 
 	private NeptuneHeader(int length, String code, String name, MessageType messageType) {
 		this.length = length;
@@ -51,5 +60,9 @@ public enum NeptuneHeader implements IMessageTag {
 	@Override
 	public byte[] getByte(Object obj) throws NeptuneException {
 		return ((String) obj).getBytes();
+	}
+
+	public static int getHeaderLength() {
+		return headerLength;
 	}
 }

@@ -1,11 +1,9 @@
-server:  shutdown: graceful
-spring:  lifecycle:    timeout-per-shutdown-phase: 15s#netty 설정
+#netty 설정
 netty:
-  tcp-port: 30900
+  host : 127.0.0.1
+  tcp-port: 30300
   boss-count: 1
   worker-count: 14
   keep-alive: true
   backlog: 128
   client-timeout: 20
-neptune:  service-code : 0900
-management:  endpoint:    shutdown:      enabled: true

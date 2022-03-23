@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import com.galaxia.engdev.message.tag.MessageType;
+import com.galaxia.engdev.msg.tag.MessageType;
 
 class MsgTypeTest {
 

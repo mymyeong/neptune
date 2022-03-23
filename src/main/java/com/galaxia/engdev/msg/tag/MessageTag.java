@@ -1,6 +1,6 @@
-package com.galaxia.engdev.message.tag;
+package com.galaxia.engdev.msg.tag;
 
-import com.galaxia.engdev.dexeption.NeptuneException;
+import com.galaxia.engdev.exception.NeptuneException;
 
 /**
  * 메시지 태그 인터페이스
@@ -8,7 +8,7 @@ import com.galaxia.engdev.dexeption.NeptuneException;
  * @author mjhan
  *
  */
-public interface IMessageTag {
+public interface MessageTag {
 
 	/**
 	 * Message tag의 길이
@@ -46,5 +46,9 @@ public interface IMessageTag {
 	 * @throws Exception
 	 */
 	public byte[] getByte(Object obj) throws NeptuneException;
+
+//	public MessageTag getNeptuneTagByName(String tagName);
+
+//	public MessageTag getByTagCode(String tagCode);
 
 }

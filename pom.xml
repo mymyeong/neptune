@@ -8,9 +8,9 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.galaxia</groupId>
-	<artifactId>spring-boot</artifactId>
+	<artifactId>gameculture</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>Engdev-SpringBoot</name>
+	<name>SpringBoot-gameculture</name>
 	<description>galaxia moneytree</description>
 	<properties>
 		<java.version>1.8</java.version>

@@ -1,4 +1,4 @@
-package com.galaxia.engdev.message;
+package com.galaxia.engdev.msg;
 
 public class MsgVersion {
 

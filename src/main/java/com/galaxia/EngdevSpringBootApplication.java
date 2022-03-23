@@ -1,4 +1,4 @@
-package com.galaxia.engdev;
+package com.galaxia;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -18,16 +18,16 @@ public class EngdevSpringBootApplication {
 		SpringApplication.run(EngdevSpringBootApplication.class, args);
 	}
 
-	private final NeptuneNettyServer tcpServer;
+//	private final NeptuneNettyServer tcpServer;
 
-	@Bean
-	public ApplicationListener<ApplicationReadyEvent> readyEventApplicationListener() {
-		return new ApplicationListener<ApplicationReadyEvent>() {
-			@Override
-			public void onApplicationEvent(ApplicationReadyEvent applicationReadyEvent) {
-
-				tcpServer.start();
-			}
-		};
-	}
+//	@Bean
+//	public ApplicationListener<ApplicationReadyEvent> readyEventApplicationListener() {
+//		return new ApplicationListener<ApplicationReadyEvent>() {
+//			@Override
+//			public void onApplicationEvent(ApplicationReadyEvent applicationReadyEvent) {
+//
+//				tcpServer.start();
+//			}
+//		};
+//	}
 }

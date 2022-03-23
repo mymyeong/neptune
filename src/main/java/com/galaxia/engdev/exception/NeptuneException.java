@@ -1,4 +1,4 @@
-package com.galaxia.engdev.dexeption;
+package com.galaxia.engdev.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

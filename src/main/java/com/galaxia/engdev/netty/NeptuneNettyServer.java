@@ -13,14 +13,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@RequiredArgsConstructor
 @Component
+@RequiredArgsConstructor
 public class NeptuneNettyServer {
 
 	private final ServerBootstrap serverBootstrap;
-
 	private final InetSocketAddress tcpPort;
-
 	private Channel serverChannel;
 
 	public void start() {
@@ -31,13 +29,15 @@ public class NeptuneNettyServer {
 		} catch (InterruptedException e) {
 			Thread.currentThread().interrupt();
 		}
+
 	}
 
 	@PreDestroy
 	public void stop() {
+		log.info("netty server stop");
 		if (serverChannel != null) {
 			serverChannel.close();
-			serverChannel.parent().close();
+			serverChannel.parent().closeFuture();
 		}
 	}
 }

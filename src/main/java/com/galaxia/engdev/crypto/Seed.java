@@ -2,7 +2,15 @@ package com.galaxia.engdev.crypto;
 
 import com.galaxia.engdev.crypto.inc.KISA_SEED_CBC;
 
-public class Seed extends AbstractCipher {
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+public class Seed implements NeptuneCipher {
+
+	private byte[] key;
+	private byte[] iv;
 
 	@Override
 	public byte[] encrypt(byte[] data) throws Exception {

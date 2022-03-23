@@ -2,40 +2,42 @@ package com.galaxia.engdev.netty;
 
 import java.util.List;
 
-import com.galaxia.engdev.message.NeptuneMsgConverter;
+import org.springframework.stereotype.Component;
+
+import com.galaxia.engdev.msg.NeptuneMsgGeneratorble;
+import com.galaxia.engdev.msg.tag.NeptuneHeader;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
 import io.netty.handler.codec.CorruptedFrameException;
+import lombok.RequiredArgsConstructor;
 
+@Component
+@RequiredArgsConstructor
 public class NetptuneMsgDecoder extends ByteToMessageDecoder {
+
+	private final NeptuneMsgGeneratorble msgConvter;
 
 	@Override
 	protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
-		if (in.readableBytes() < 5) {
-			return;
-		}
+		System.out.println("NetptuneMsgDecoder call decode");
 
-		in.markReaderIndex();
+//		if (in.readableBytes() < NeptuneHeader.MESSAGE_LENGTH.getLength()) {
+//			return;
+//		}
 
-		int magicNumber = in.readUnsignedByte();
-		if (magicNumber != 'F') {
-			in.resetReaderIndex();
-			throw new CorruptedFrameException("Invalid magic number: " + magicNumber);
-		}
-
-		int dataLength = in.readInt();
+		byte[] dataLengthByte = new byte[NeptuneHeader.MESSAGE_LENGTH.getLength()];
+		in.readBytes(dataLengthByte);
+		int dataLength = Integer.parseInt(new String(dataLengthByte));
 		if (in.readableBytes() < dataLength) {
-			in.resetReaderIndex();
 			return;
 		}
 
-		byte[] decoded = new byte[dataLength];
-		in.readBytes(decoded);
+		byte[] readMsgByte = new byte[dataLength];
+		in.readBytes(readMsgByte);
 
-		out.add(NeptuneMsgConverter.getNeptuneMsg(decoded));
-
+		out.add(msgConvter.getNeptuneMsg(readMsgByte));
 	}
 
 }
