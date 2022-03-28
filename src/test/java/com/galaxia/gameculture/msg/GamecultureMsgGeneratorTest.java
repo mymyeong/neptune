@@ -6,7 +6,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import com.galaxia.MocMessageGenerator;
-import com.galaxia.engdev.msg.AbstractNeptuneMsg;
+import com.galaxia.engdev.msg.NeptuneMsg;
 import com.galaxia.gameculture.msg.impl.CertReqMsg;
 
 class GamecultureMsgGeneratorTest {
@@ -19,7 +19,9 @@ class GamecultureMsgGeneratorTest {
 	void test() {
 		CertReqMsg mocCertReqMsg = MocMessageGenerator.getMocCertReqMsg();
 		try {
-			AbstractNeptuneMsg msg = new GamecultureMsgGenerator().getNeptuneMsg(mocCertReqMsg.getBytes(null));
+			byte[] bytes = mocCertReqMsg.getBytes(null);
+			System.out.println(new String(bytes));
+			NeptuneMsg msg = new GamecultureMsgGenerator().getNeptuneMsg(bytes);
 			System.out.println(msg.toString());
 
 			assertEquals(msg, mocCertReqMsg);
@@ -27,6 +29,5 @@ class GamecultureMsgGeneratorTest {
 			e.printStackTrace();
 		}
 	}
-
 
 }

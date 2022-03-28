@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import com.galaxia.MocMessageGenerator;
 import com.galaxia.engdev.exception.NeptuneException;
-import com.galaxia.engdev.msg.AbstractNeptuneMsg;
+import com.galaxia.engdev.msg.NeptuneMsg;
 import com.galaxia.engdev.proc.NeptuneProc;
 import com.galaxia.gameculture.msg.GamecultureCommand;
 
@@ -24,7 +24,7 @@ class GamecultureProcessHadlerTest {
 			NeptuneProc neptuneProc = new GamecultureProcessHadler().getNeptuneProc(GamecultureCommand.CERT_REQ.getCommand());
 
 			// when
-			AbstractNeptuneMsg respMsg = neptuneProc.proc(MocMessageGenerator.getMocCertReqMsg());
+			NeptuneMsg respMsg = neptuneProc.proc(MocMessageGenerator.getMocCertReqMsg());
 
 			// then
 			assertNotNull(respMsg);

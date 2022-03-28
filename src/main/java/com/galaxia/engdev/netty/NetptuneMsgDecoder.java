@@ -10,7 +10,6 @@ import com.galaxia.engdev.msg.tag.NeptuneHeader;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
-import io.netty.handler.codec.CorruptedFrameException;
 import lombok.RequiredArgsConstructor;
 
 @Component

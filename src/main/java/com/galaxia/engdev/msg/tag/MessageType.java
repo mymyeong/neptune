@@ -3,7 +3,7 @@ package com.galaxia.engdev.msg.tag;
 import java.nio.ByteBuffer;
 import java.util.LinkedList;
 
-import com.galaxia.engdev.msg.AbstractNeptuneMsg;
+import com.galaxia.engdev.msg.NeptuneMsg;
 import com.galaxia.engdev.util.NumberUtil;
 import com.galaxia.engdev.util.StringUtil;
 
@@ -20,7 +20,7 @@ public enum MessageType {
 	 * @author mjhan
 	 *
 	 */
-	Integer() {
+	IntegerType() {
 
 		@Override
 		public boolean typeChecker(Object obj) {
@@ -30,6 +30,17 @@ public enum MessageType {
 			}
 			return false;
 		}
+
+		@Override
+		public boolean isInteger() {
+			return true;
+		}
+
+		@Override
+		public Class<?> getTagClass() {
+			return Integer.class;
+		}
+
 	},
 
 	/**
@@ -45,6 +56,16 @@ public enum MessageType {
 				return true;
 			}
 			return false;
+		}
+
+		@Override
+		public boolean isInteger() {
+			return true;
+		}
+
+		@Override
+		public Class<?> getTagClass() {
+			return int[].class;
 		}
 	},
 
@@ -68,6 +89,16 @@ public enum MessageType {
 		public boolean isArray() {
 			return true;
 		}
+
+		@Override
+		public boolean isInteger() {
+			return true;
+		}
+
+		@Override
+		public Class<?> getTagClass() {
+			return int[].class;
+		}
 	},
 
 	/**
@@ -76,7 +107,7 @@ public enum MessageType {
 	 * @author mjhan
 	 *
 	 */
-	String() {
+	StringType() {
 		@Override
 		public boolean typeChecker(Object obj) {
 			if (obj instanceof String) {
@@ -105,6 +136,11 @@ public enum MessageType {
 		public boolean isArray() {
 			return true;
 		}
+
+		@Override
+		public Class<?> getTagClass() {
+			return String[].class;
+		}
 	},
 
 	/**
@@ -121,6 +157,7 @@ public enum MessageType {
 			}
 			return false;
 		}
+
 	},
 
 	/**
@@ -134,6 +171,7 @@ public enum MessageType {
 		public boolean typeChecker(Object obj) {
 			return StringUtil.isIpAddressV4(obj.toString());
 		}
+
 	},
 
 	;
@@ -182,19 +220,19 @@ public enum MessageType {
 			}
 		}
 
-		int bodyDataLength = totalLength + (AbstractNeptuneMsg.VALUE_LENGTH * dataCnt);
+		int bodyDataLength = totalLength + (NeptuneMsg.VALUE_LENGTH * dataCnt);
 
-		buffer = ByteBuffer.allocate(AbstractNeptuneMsg.MESSAGE_TAG_LENGTH //
-				+ AbstractNeptuneMsg.MESSAGE_COUNT_LENGTH //
-				+ AbstractNeptuneMsg.VALUE_LENGTH //
+		buffer = ByteBuffer.allocate(NeptuneMsg.MESSAGE_TAG_LENGTH //
+				+ NeptuneMsg.MESSAGE_COUNT_LENGTH //
+				+ NeptuneMsg.VALUE_LENGTH //
 				+ bodyDataLength);
 
 		buffer.put(tagCode.getBytes())//
-				.put(NumberUtil.toZeroString(dataCnt, AbstractNeptuneMsg.MESSAGE_COUNT_LENGTH).getBytes())//
-				.put(NumberUtil.toZeroString(totalLength, AbstractNeptuneMsg.VALUE_LENGTH).getBytes());
+				.put(NumberUtil.toZeroString(dataCnt, NeptuneMsg.MESSAGE_COUNT_LENGTH).getBytes())//
+				.put(NumberUtil.toZeroString(totalLength, NeptuneMsg.VALUE_LENGTH).getBytes());
 
 		for (byte[] d : dataList) {
-			buffer.put(NumberUtil.toZeroString(d.length, AbstractNeptuneMsg.VALUE_LENGTH).getBytes())//
+			buffer.put(NumberUtil.toZeroString(d.length, NeptuneMsg.VALUE_LENGTH).getBytes())//
 					.put(d);
 		}
 
@@ -205,28 +243,45 @@ public enum MessageType {
 		int dataCnt = 0, totalLength = 0;
 		ByteBuffer buffer;
 		byte[] data = null;
-		if (this.equals(MessageType.Integer)) {
+		if (this.equals(MessageType.IntegerType)) {
 			data = NumberUtil.toZeroString(obj.toString(), length).getBytes();
 		} else {
 			data = StringUtil.stringToFillSpaceByte(obj.toString(), length);
 		}
 
-		buffer = ByteBuffer.allocate(AbstractNeptuneMsg.MESSAGE_TAG_LENGTH //
-				+ AbstractNeptuneMsg.MESSAGE_COUNT_LENGTH //
-				+ AbstractNeptuneMsg.VALUE_LENGTH //
-				+ AbstractNeptuneMsg.VALUE_LENGTH //
+		buffer = ByteBuffer.allocate(NeptuneMsg.MESSAGE_TAG_LENGTH //
+				+ NeptuneMsg.MESSAGE_COUNT_LENGTH //
+				+ NeptuneMsg.VALUE_LENGTH //
+				+ NeptuneMsg.VALUE_LENGTH //
 				+ data.length);
 
 		dataCnt = 1;
-		totalLength = data.length + AbstractNeptuneMsg.VALUE_LENGTH;
+		totalLength = data.length + NeptuneMsg.VALUE_LENGTH;
 
 		buffer.put(tagCode.getBytes())//
-				.put(NumberUtil.toZeroString(dataCnt, AbstractNeptuneMsg.MESSAGE_COUNT_LENGTH).getBytes())//
-				.put(NumberUtil.toZeroString(totalLength, AbstractNeptuneMsg.VALUE_LENGTH).getBytes())//
-				.put(NumberUtil.toZeroString(data.length, AbstractNeptuneMsg.VALUE_LENGTH).getBytes())//
+				.put(NumberUtil.toZeroString(dataCnt, NeptuneMsg.MESSAGE_COUNT_LENGTH).getBytes())//
+				.put(NumberUtil.toZeroString(totalLength, NeptuneMsg.VALUE_LENGTH).getBytes())//
+				.put(NumberUtil.toZeroString(data.length, NeptuneMsg.VALUE_LENGTH).getBytes())//
 				.put(data);
 
 		return buffer.array();
+	}
+
+	public Object getObject(String dataString) {
+		if (this.isInteger()) {
+			Integer n = Integer.parseInt(dataString.equals("") ? "0" : dataString);
+			return n;
+		} else {
+			return dataString;
+		}
+	}
+
+	public boolean isInteger() {
+		return false;
+	}
+
+	public Class<?> getTagClass() {
+		return String.class;
 	}
 
 }

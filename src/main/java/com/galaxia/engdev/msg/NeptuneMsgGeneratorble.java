@@ -11,19 +11,19 @@ import com.galaxia.engdev.msg.tag.NeptuneHeader;
 
 public interface NeptuneMsgGeneratorble {
 
-	public AbstractNeptuneMsg getNeptuneMsg(byte[] data);
+	public NeptuneMsg getNeptuneMsg(byte[] data);
 
 	public static HashMap<NeptuneHeader, String> getHeaderData(byte[] data) throws NeptuneException {
 
 		HashMap<NeptuneHeader, String> headerData = new HashMap<>();
 
 		int pos = 0;
-//		String messageLength = new String(Arrays.copyOfRange(data, pos, pos += NeptuneHeader.MESSAGE_LENGTH.getLength())).trim();
+		String messageLength = new String(Arrays.copyOfRange(data, pos, pos += NeptuneHeader.MESSAGE_LENGTH.getLength())).trim();
 		String version = new String(Arrays.copyOfRange(data, pos, pos += NeptuneHeader.VERSION.getLength())).trim();
 		String serviceId = new String(Arrays.copyOfRange(data, pos, pos += NeptuneHeader.SERVICE_ID.getLength())).trim();
 		String serviceCode = new String(Arrays.copyOfRange(data, pos, pos += NeptuneHeader.SERVICE_CODE.getLength())).trim();
 
-//		headerData.put(NeptuneHeader.MESSAGE_LENGTH, messageLength);
+		headerData.put(NeptuneHeader.MESSAGE_LENGTH, messageLength);
 		headerData.put(NeptuneHeader.VERSION, version);
 		headerData.put(NeptuneHeader.SERVICE_ID, serviceId);
 		headerData.put(NeptuneHeader.SERVICE_CODE, serviceCode);

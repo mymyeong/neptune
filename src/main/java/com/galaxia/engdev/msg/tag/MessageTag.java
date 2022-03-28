@@ -47,8 +47,4 @@ public interface MessageTag {
 	 */
 	public byte[] getByte(Object obj) throws NeptuneException;
 
-//	public MessageTag getNeptuneTagByName(String tagName);
-
-//	public MessageTag getByTagCode(String tagCode);
-
 }

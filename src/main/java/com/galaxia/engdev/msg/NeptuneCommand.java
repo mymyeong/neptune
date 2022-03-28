@@ -1,6 +1,6 @@
 package com.galaxia.engdev.msg;
 
-public interface NeptuneCommandInterface {
+public interface NeptuneCommand {
 
 	public String getCommand();
 }

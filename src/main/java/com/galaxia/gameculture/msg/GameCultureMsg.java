@@ -1,10 +1,10 @@
 package com.galaxia.gameculture.msg;
 
-import com.galaxia.engdev.msg.AbstractNeptuneMsg;
+import com.galaxia.engdev.msg.NeptuneMsg;
 import com.galaxia.engdev.msg.tag.MessageTag;
 import com.galaxia.gameculture.msg.tag.GamecultureMsgTag;
 
-public abstract class AbtractGameCultureMsg extends AbstractNeptuneMsg {
+public abstract class GameCultureMsg extends NeptuneMsg {
 
 	@Override
 	public MessageTag getNeptuneMsgTagByTagName(String tagName) {

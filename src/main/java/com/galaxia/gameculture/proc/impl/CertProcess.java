@@ -2,9 +2,10 @@ package com.galaxia.gameculture.proc.impl;
 
 import java.util.HashMap;
 
+import com.galaxia.engdev.errorcode.NeptuneErrorCode;
 import com.galaxia.engdev.exception.NeptuneException;
-import com.galaxia.engdev.msg.AbstractNeptuneMsg;
-import com.galaxia.engdev.proc.AbstractNeptuneProc;
+import com.galaxia.engdev.msg.NeptuneMsg;
+import com.galaxia.engdev.proc.NeptuneProc;
 import com.galaxia.gameculture.errorcode.GamecultureErrorcode;
 import com.galaxia.gameculture.msg.impl.CertReqMsg;
 import com.galaxia.gameculture.msg.impl.CertRespMsg;
@@ -12,13 +13,13 @@ import com.galaxia.gameculture.msg.impl.CertRespMsg;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class CertProcess extends AbstractNeptuneProc {
+public class CertProcess extends NeptuneProc {
 
 	protected CertReqMsg certReqMsg;
 	protected CertRespMsg certRespMsg;
 
 	@Override
-	public void request(AbstractNeptuneMsg reqMsg) throws NeptuneException {
+	public void request(NeptuneMsg reqMsg) throws NeptuneException {
 		if (reqMsg instanceof CertReqMsg) {
 			certReqMsg = (CertReqMsg) reqMsg;
 		} else {
@@ -29,13 +30,12 @@ public class CertProcess extends AbstractNeptuneProc {
 	}
 
 	@Override
-	public AbstractNeptuneMsg response() {
+	public NeptuneMsg response() {
 		certRespMsg = new CertRespMsg();
 		certRespMsg.copyHeader(certReqMsg);
-		certRespMsg.setRespCode("0000");
-		certRespMsg.setRespMsg("success");
-		certRespMsg.setDetailCode("00");
-		certRespMsg.setDetailMsg("OK");
+
+		certRespMsg.setResponse(NeptuneErrorCode.SUCCESS);
+
 		log.info(certRespMsg.toString());
 		return certRespMsg;
 	}

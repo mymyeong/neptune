@@ -7,14 +7,14 @@ import com.galaxia.engdev.exception.NeptuneException;
 public enum NeptuneHeader implements MessageTag {
 
 	// NEPTUNE HEADER
-	MESSAGE_LENGTH(4, "messageLength", "messageLength", MessageType.Integer), //
-	VERSION(10, "version", "version", MessageType.String), //
-	SERVICE_ID(20, "serviceId", "serviceId", MessageType.String), //
-	SERVICE_CODE(4, "serviceCode", "serviceCode", MessageType.String), //
-	COMMAND(4, "command", "command", MessageType.String), //
-	ORDER_ID(64, "orderId", "orderId", MessageType.String), //
-	ORDER_DATE(14, "orderDate", "orderDate", MessageType.String), //
-	NUMBER_OF_RECORD(4, "numberOfRecord", "numberOfRecord", MessageType.Integer),
+	MESSAGE_LENGTH(4, "messageLength", "messageLength", MessageType.IntegerType), //
+	VERSION(10, "version", "version", MessageType.StringType), //
+	SERVICE_ID(20, "serviceId", "serviceId", MessageType.StringType), //
+	SERVICE_CODE(4, "serviceCode", "serviceCode", MessageType.StringType), //
+	COMMAND(4, "command", "command", MessageType.StringType), //
+	ORDER_ID(64, "orderId", "orderId", MessageType.StringType), //
+	ORDER_DATE(14, "orderDate", "orderDate", MessageType.StringType), //
+	NUMBER_OF_RECORD(4, "numberOfRecord", "numberOfRecord", MessageType.IntegerType),
 	//
 	;
 

@@ -1,6 +1,7 @@
 package com.galaxia.gameculture.msg.impl;
 
-import com.galaxia.gameculture.msg.AbtractGameCultureMsg;
+import com.galaxia.engdev.msg.ResponseMsg;
+import com.galaxia.gameculture.msg.GameCultureMsg;
 import com.galaxia.gameculture.msg.GamecultureCommand;
 
 import lombok.Getter;
@@ -10,15 +11,15 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString(callSuper = true)
-public class CertRespMsg extends AbtractGameCultureMsg {
+public class CertRespMsg extends GameCultureMsg implements ResponseMsg {
 
 	public CertRespMsg() {
 		setServiceCode("0300");
 		setCommand(GamecultureCommand.CERT_RESP.getCommand());
 	}
 
-	private String respCode;
-	private String respMsg;
+	private String responseCode;
+	private String responseMsg;
 	private String detailCode;
 	private String detailMsg;
 

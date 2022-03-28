@@ -11,9 +11,9 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public enum GamecultureMsgTag implements MessageTag {
 
-	AMOUNT(4, MessageType.Integer, "0012", "amount"), //
+	AMOUNT(4, MessageType.IntegerType, "0012", "amount"), //
 	PIN_NUMBER(32, MessageType.StringArray, "0008", "pinNumber"),
-	ITEM_NAME(50, MessageType.String, "0004", "itemName"),
+	ITEM_NAME(50, MessageType.StringType, "0004", "itemName"),
 
 	;
 

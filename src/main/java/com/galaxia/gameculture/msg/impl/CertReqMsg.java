@@ -1,6 +1,6 @@
 package com.galaxia.gameculture.msg.impl;
 
-import com.galaxia.gameculture.msg.AbtractGameCultureMsg;
+import com.galaxia.gameculture.msg.GameCultureMsg;
 import com.galaxia.gameculture.msg.GamecultureCommand;
 
 import lombok.EqualsAndHashCode;
@@ -12,7 +12,7 @@ import lombok.ToString;
 @Setter
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = false)
-public class CertReqMsg extends AbtractGameCultureMsg {
+public class CertReqMsg extends GameCultureMsg {
 
 	public CertReqMsg() {
 		setServiceCode("0300");

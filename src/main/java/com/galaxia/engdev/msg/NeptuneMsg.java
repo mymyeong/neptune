@@ -12,6 +12,7 @@ import java.util.Properties;
 
 import com.galaxia.engdev.crypto.NeptuneCipher;
 import com.galaxia.engdev.errorcode.NeptuneErrorCode;
+import com.galaxia.engdev.errorcode.ErrorCode;
 import com.galaxia.engdev.exception.NeptuneException;
 import com.galaxia.engdev.msg.tag.MessageTag;
 import com.galaxia.engdev.msg.tag.MessageType;
@@ -24,7 +25,7 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * Neptune Message<br>
+ * Neptune Message
  *
  * @author mjhan
  *
@@ -32,9 +33,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Getter
 @Setter
-public abstract class AbstractNeptuneMsg {
-
-//	private final MessageTag neptuneMsgTag;
+public abstract class NeptuneMsg {
 
 	public static final int MESSAGE_TAG_LENGTH = 4;
 	public static final int MESSAGE_COUNT_LENGTH = 4;
@@ -116,7 +115,7 @@ public abstract class AbstractNeptuneMsg {
 	 *
 	 * @param msg
 	 */
-	public void copyHeader(AbstractNeptuneMsg msg) {
+	public void copyHeader(NeptuneMsg msg) {
 		this.version = msg.getVersion();
 		this.serviceCode = msg.getServiceCode();
 		this.serviceId = msg.getServiceId();
@@ -182,62 +181,34 @@ public abstract class AbstractNeptuneMsg {
 				}
 
 				String setterName = StringUtil.getSetterName(tag.getName());
+				MessageType messageType = tag.getMessageType();
 
 				if (messageCnt == 1) {
 					int dataLength = Integer.parseInt(new String(Arrays.copyOfRange(bodyData, pos, pos += VALUE_LENGTH)));
 					String temp = new String(Arrays.copyOfRange(bodyData, pos, pos += dataLength)).trim();
+					Object obj = messageType.getObject(temp);
+					this.getClass().getMethod(setterName, messageType.getTagClass()).invoke(this, obj);
 
-					switch (tag.getMessageType()) {
-					case Integer:
-						if (NumberUtil.isNumber(temp)) {
-							int n = Integer.parseInt(temp.equals("") ? "0" : temp);
-							this.getClass().getMethod(setterName, Integer.class).invoke(this, n);
-						} else {
-							log.info("Integer 변환 에러[" + temp + "]");
-							throw new NeptuneException(NeptuneErrorCode.MESSAGE_TAG_TYPE_ERROR);
-						}
-						break;
-
-					case Yn:
-						if ((!temp.equalsIgnoreCase("Y") || !temp.equalsIgnoreCase("N"))) {
-							throw new NeptuneException(NeptuneErrorCode.MESSAGE_TAG_TYPE_ERROR);
-						}
-					case IpAddressV4:
-						if (StringUtil.isIpAddressV4(temp)) {
-							throw new NeptuneException(NeptuneErrorCode.MESSAGE_TAG_TYPE_ERROR);
-						}
-					case String:
-					default:
-						this.getClass().getMethod(setterName, String.class).invoke(this, temp);
-						break;
-					}
 				} else if (messageCnt > 1) {
 					int dataLength = 0;
+					Object dataArray[];
 
-					switch (tag.getMessageType()) {
-					case IntegerArray:
-					case IntArray:
-						int intData[] = new int[messageCnt];
-
-						for (int j = 0; j < messageCnt; j++) {
-							dataLength = Integer.parseInt(new String(Arrays.copyOfRange(bodyData, pos, pos += VALUE_LENGTH)));
-							intData[j] = Integer.parseInt(new String(Arrays.copyOfRange(bodyData, pos, pos += dataLength)));
-						}
-
-						this.getClass().getMethod(setterName, int[].class).invoke(this, intData);
-
-						break;
-					case StringArray:
-					default:
-						String strData[] = new String[messageCnt];
-						for (int j = 0; j < messageCnt; j++) {
-							dataLength = Integer.parseInt(new String(Arrays.copyOfRange(bodyData, pos, pos += VALUE_LENGTH)));
-							strData[j] = new String(Arrays.copyOfRange(bodyData, pos, pos += dataLength)).trim();
-						}
-
-						this.getClass().getMethod(setterName, String[].class).invoke(this, new Object[] { strData });
-						break;
+					if (messageType.isInteger()) {
+						dataArray = new Integer[messageCnt];
+					} else {
+						dataArray = new String[messageCnt];
 					}
+
+					for (int j = 0; j < messageCnt; j++) {
+						dataLength = Integer.parseInt(new String(Arrays.copyOfRange(bodyData, pos, pos += VALUE_LENGTH)));
+						String obj = new String(Arrays.copyOfRange(bodyData, pos, pos += dataLength)).trim();
+						Object object = messageType.getObject(obj);
+
+						dataArray[j] = object;
+					}
+
+					this.getClass().getMethod(setterName, messageType.getTagClass()).invoke(this, new Object[] { dataArray });
+
 				}
 
 			} catch (NoSuchMethodException e) {
@@ -290,7 +261,7 @@ public abstract class AbstractNeptuneMsg {
 			String getterName = StringUtil.getGetterName(tag.getName());
 			Object obj = this.getClass().getMethod(getterName).invoke(this);
 
-			if (tag.getMessageType() == MessageType.Integer) {
+			if (tag.getMessageType() == MessageType.IntegerType) {
 				int i = (int) obj;
 				buffer.put(NumberUtil.toZeroString(i, tag.getLength()).getBytes());
 			} else {
@@ -331,5 +302,15 @@ public abstract class AbstractNeptuneMsg {
 		setNumberOfRecord(totalCnt);
 
 		return buffer.array();
+	}
+
+	public void setResponse(ErrorCode errorCode) {
+		if (this instanceof ResponseMsg) {
+			ResponseMsg msg = (ResponseMsg) this;
+			msg.setResponseCode(errorCode.getResponseCode());
+			msg.setResponseMsg(errorCode.getResponseMsg());
+			msg.setDetailCode(errorCode.getDetailCode());
+			msg.setDetailMsg(errorCode.getDetailMsg());
+		}
 	}
 }
