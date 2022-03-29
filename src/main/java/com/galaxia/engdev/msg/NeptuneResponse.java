@@ -1,6 +1,6 @@
 package com.galaxia.engdev.msg;
 
-public interface ResponseMsg {
+public interface NeptuneResponse {
 
 	public void setResponseCode(String responseCode);
 

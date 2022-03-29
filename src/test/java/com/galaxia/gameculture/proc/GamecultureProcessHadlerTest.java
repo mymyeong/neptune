@@ -1,6 +1,7 @@
 package com.galaxia.gameculture.proc;
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -30,6 +31,7 @@ class GamecultureProcessHadlerTest {
 			assertNotNull(respMsg);
 		} catch (NeptuneException e) {
 			e.printStackTrace();
+			fail();
 		}
 	}
 }

@@ -305,8 +305,8 @@ public abstract class NeptuneMsg {
 	}
 
 	public void setResponse(ErrorCode errorCode) {
-		if (this instanceof ResponseMsg) {
-			ResponseMsg msg = (ResponseMsg) this;
+		if (this instanceof NeptuneResponse) {
+			NeptuneResponse msg = (NeptuneResponse) this;
 			msg.setResponseCode(errorCode.getResponseCode());
 			msg.setResponseMsg(errorCode.getResponseMsg());
 			msg.setDetailCode(errorCode.getDetailCode());

@@ -5,7 +5,10 @@ import lombok.Getter;
 public enum StatusCode {
 
 	/** 인증요청 */
-	ORDER("0000")
+	ORDER("0000"),
+
+	/** 인증성공 */
+	CERT("1001")
 
 	;
 

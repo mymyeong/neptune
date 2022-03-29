@@ -2,7 +2,7 @@ package com.galaxia.engdev.netty;
 
 import org.springframework.stereotype.Component;
 
-import com.galaxia.engdev.msg.NeptuneMsgGeneratorble;
+import com.galaxia.engdev.msg.NeptuneMsgGenerator;
 
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
@@ -12,8 +12,9 @@ import lombok.RequiredArgsConstructor;
 @Component
 @RequiredArgsConstructor
 public class NettyChannelInitializer extends ChannelInitializer<SocketChannel> {
-	private final NeptuneMsgHandler testHandler;
-	private final NeptuneMsgGeneratorble msgConvter;
+
+	private final NeptuneMsgHandler neptuneMsgHandler;
+	private final NeptuneMsgGenerator msgConvter;
 
 	// 클라이언트 소켓 채널이 생성될 때 호출
 	@Override
@@ -25,6 +26,6 @@ public class NettyChannelInitializer extends ChannelInitializer<SocketChannel> {
 
 		// 뒤이어 처리할 디코더 및 핸들러 추가
 		pipeline.addLast(decoder);
-		pipeline.addLast(testHandler);
+		pipeline.addLast(neptuneMsgHandler);
 	}
 }

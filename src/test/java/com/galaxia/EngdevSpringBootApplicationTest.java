@@ -1,7 +1,5 @@
 package com.galaxia;
 
-import static org.junit.Assert.assertTrue;
-
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
@@ -9,14 +7,13 @@ import java.net.Socket;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
 
 import com.galaxia.gameculture.msg.impl.CertReqMsg;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-//@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT, properties = { "netty.tcp-port: 9999" })
+//@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT, properties = { "netty.tcp-port: 30300" })
 class EngdevSpringBootApplicationTest {
 
 	@BeforeAll
@@ -29,7 +26,7 @@ class EngdevSpringBootApplicationTest {
 		log.info("afterAllClass");
 	}
 
-	@Test
+//	@Test
 	void certReqSendTest() throws Exception {
 
 		log.info("certReqSendTest");
@@ -73,8 +70,6 @@ class EngdevSpringBootApplicationTest {
 			} catch (Exception e) {
 			}
 		}
-
-		assertTrue(true);
 	}
 
 }

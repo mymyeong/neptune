@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import com.galaxia.engdev.msg.NeptuneMsgGeneratorble;
+import com.galaxia.engdev.msg.NeptuneMsgGenerator;
 import com.galaxia.engdev.msg.tag.NeptuneHeader;
 
 import io.netty.buffer.ByteBuf;
@@ -16,15 +16,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class NetptuneMsgDecoder extends ByteToMessageDecoder {
 
-	private final NeptuneMsgGeneratorble msgConvter;
+	private final NeptuneMsgGenerator msgConvter;
 
 	@Override
 	protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
-		System.out.println("NetptuneMsgDecoder call decode");
-
-//		if (in.readableBytes() < NeptuneHeader.MESSAGE_LENGTH.getLength()) {
-//			return;
-//		}
 
 		byte[] dataLengthByte = new byte[NeptuneHeader.MESSAGE_LENGTH.getLength()];
 		in.readBytes(dataLengthByte);

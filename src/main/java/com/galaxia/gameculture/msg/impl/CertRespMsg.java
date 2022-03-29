@@ -1,6 +1,6 @@
 package com.galaxia.gameculture.msg.impl;
 
-import com.galaxia.engdev.msg.ResponseMsg;
+import com.galaxia.engdev.msg.NeptuneResponse;
 import com.galaxia.gameculture.msg.GameCultureMsg;
 import com.galaxia.gameculture.msg.GamecultureCommand;
 
@@ -11,7 +11,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString(callSuper = true)
-public class CertRespMsg extends GameCultureMsg implements ResponseMsg {
+public class CertRespMsg extends GameCultureMsg implements NeptuneResponse {
 
 	public CertRespMsg() {
 		setServiceCode("0300");

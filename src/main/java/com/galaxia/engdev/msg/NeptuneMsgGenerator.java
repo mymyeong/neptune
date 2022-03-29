@@ -9,9 +9,9 @@ import com.galaxia.engdev.errorcode.NeptuneErrorCode;
 import com.galaxia.engdev.exception.NeptuneException;
 import com.galaxia.engdev.msg.tag.NeptuneHeader;
 
-public interface NeptuneMsgGeneratorble {
+public interface NeptuneMsgGenerator {
 
-	public NeptuneMsg getNeptuneMsg(byte[] data);
+	public NeptuneMsg getNeptuneMsg(byte[] data) throws NeptuneException;
 
 	public static HashMap<NeptuneHeader, String> getHeaderData(byte[] data) throws NeptuneException {
 
